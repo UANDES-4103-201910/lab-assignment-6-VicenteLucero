@@ -11,6 +11,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+
   end
 
   # GET /users/new
@@ -26,12 +27,29 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     #complete this method
+    @user = User.create!(params[:user])
+    if @user.save
+      flash[:notice] = "Succesfully Log in"
+      redirect_to users_path(@user.id)
+    else
+      flash.now[:notice] = "Error"
+      redirect_to edit_users_path
+    end
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
     #complete this method
+    user = current_user.user.find(params[:id])
+    user.update!(user_params)
+    if user.save
+      flash[:notice] = "Sucesfully uploaded"
+      redirect_to users_path(user.id)
+    else
+      flash.now[:notice] = "Error"
+      render 'update'
+    end
   end
 
   # DELETE /users/1
